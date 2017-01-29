@@ -11,14 +11,19 @@ public class test {
 	 */
 	public static void main(String[] args)
 	{
-		Group GroupofStudents = new Group();
-		List<Student> temp = GroupofStudents.CreateStudents();
-		GroupofStudents.GenerateGroups(temp);
+		Group Groups = new Group();
+		List<Student> temp = Groups.CreateStudents();
+		Groups.GenerateGroups(temp);
 		
-		Student s = GroupofStudents.findStudent("Rizwan");
-		GroupofStudents.Chat(s, "Hello");
-		HashSet<String> a = GroupofStudents.Chat(s, "asdf");
+		Student s = Groups.findStudent("Rizwan");
+		Student r = Groups.findStudent("Brieanna");
 		
+		Groups.Chat(s, "Hello");
+		Groups.Chat(s, "asdf");
+		Groups.Chat(s, "Hi!");
+		
+		
+		HashSet<String> a = Groups.FindConversationsofStudent("Rizwan");
 		
 		
 		

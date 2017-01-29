@@ -9,14 +9,14 @@ import java.util.List;
 public class Group 
 {
 	//Represents class of students
-	private ArrayList<Student> GroupofAllStudents;
-	private Class asdf = new Class();
+	private ArrayList<Student> ClassofStudentsSorted;
+	private Class classroom = new Class();
 	
-	//the set that holds the 2 students in a group
+	//the set that holds the 2 students in a group, and the conversations set
 	private HashSet<Student> Groupof2Students;
 	private HashSet<String> conversations;
 	
-	//Group --> 2 Students
+	//Read as Group --> Students
 	private HashMap<String, HashSet> Group2students;
 	private HashMap<Student, String> Student2Group;
 	private HashMap<String, HashSet> Group2messages;
@@ -26,7 +26,7 @@ public class Group
 	
 	public Group()
 	{
-		GroupofAllStudents = new ArrayList<Student>();
+		ClassofStudentsSorted = new ArrayList<Student>();
 		Groupof2Students = new HashSet<Student>();
 		Group2students = new HashMap<String, HashSet>();
 		Student2Group = new HashMap<Student, String>();
@@ -66,18 +66,18 @@ public class Group
 	 */
 	public List<Student> CreateStudents()
 	{
-		Collections.sort(asdf.listofStudents);
-		for(String s: asdf.listofStudents)
+		Collections.sort(classroom.listofStudents);
+		for(String s: classroom.listofStudents)
 		{
 			String[] parts = s.split(" ");
 			
 			Student asdf = new Student(parts[0], parts[1], 0);
 			
-			GroupofAllStudents.add(asdf);
+			ClassofStudentsSorted.add(asdf);
 
 		}
 		
-		return GroupofAllStudents;
+		return ClassofStudentsSorted;
 	}
 	
 	/**
@@ -108,7 +108,7 @@ public class Group
 		
 		
 		
-		for (Student item: GroupofAllStudents)
+		for (Student item: ClassofStudentsSorted)
 		{
 			if (item.firstName.equals(first))
 			{
@@ -128,7 +128,7 @@ public class Group
 		return group;
 	}
 	
-	public HashSet Chat(Student s, String message)
+	public void Chat(Student s, String message)
 	{
 		String group = findStudentGroup(s.firstName);
 		
@@ -136,12 +136,16 @@ public class Group
 		
 		Group2messages.put(group, conversations);
 		
-		return Group2messages.get(group);
 		
+	}
+	
+	public HashSet<String> FindConversationsofStudent(String firstName)
+	{
+		String group = findStudentGroup(firstName);
 		
-		
-		
-		
+		HashSet<String> conversation = Group2messages.get(group);
+		return conversation;
+
 	}
 	
 }
