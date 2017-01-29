@@ -31,7 +31,6 @@ public class Group
 		Group2students = new HashMap<String, HashSet>();
 		Student2Group = new HashMap<Student, String>();
 		Group2messages = new HashMap<String, ArrayList>();
-		//conversations = new HashSet<String>();
 		conversations = new ArrayList<String>();
 		
 
@@ -51,9 +50,7 @@ public class Group
 		Groupof2Students.add(Student1);
 		Groupof2Students.add(Student2);
 		size++;
-		
-		//GroupofAllStudents = "Group" + size;
-		
+				
 		Group2students.put("Group"+size, Groupof2Students);
 		Student2Group.put(Student1, "Group"+size);
 		Student2Group.put(Student2, "Group"+size);
@@ -164,7 +161,6 @@ public class Group
 	{
 		String group = findStudentGroup(firstName);
 		
-		//HashSet<String> conversation = Group2messages.get(group);
 		ArrayList<String> conversation = Group2messages.get(group);
 		
 		return conversation;
