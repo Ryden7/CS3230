@@ -1,5 +1,6 @@
 package StudentChat;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class test {
@@ -14,11 +15,14 @@ public class test {
 		List<Student> temp = GroupofStudents.CreateStudents();
 		GroupofStudents.GenerateGroups(temp);
 		
-		Student me = GroupofStudents.findStudent("Rizwan");
-		me.Chat("hello");
-		me.Chat("asdf");
+		Student s = GroupofStudents.findStudent("Rizwan");
+		GroupofStudents.Chat(s, "Hello");
+		HashSet<String> a = GroupofStudents.Chat(s, "asdf");
 		
-		for(String item: me.ListofMessages)
+		
+		
+		
+		for(String item: a)
 		{
 			System.out.println(item);
 		}

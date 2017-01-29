@@ -14,9 +14,13 @@ public class Group
 	
 	//the set that holds the 2 students in a group
 	private HashSet<Student> Groupof2Students;
+	private HashSet<String> conversations;
 	
 	//Group --> 2 Students
 	private HashMap<String, HashSet> Group2students;
+	private HashMap<Student, String> Student2Group;
+	private HashMap<String, HashSet> Group2messages;
+	
 	//Group size
 	private int size;
 	
@@ -25,6 +29,11 @@ public class Group
 		GroupofAllStudents = new ArrayList<Student>();
 		Groupof2Students = new HashSet<Student>();
 		Group2students = new HashMap<String, HashSet>();
+		Student2Group = new HashMap<Student, String>();
+		Group2messages = new HashMap<String, HashSet>();
+		conversations = new HashSet<String>();
+		
+
 		size = 0;
 		
 	}
@@ -45,6 +54,9 @@ public class Group
 		//GroupofAllStudents = "Group" + size;
 		
 		Group2students.put("Group"+size, Groupof2Students);
+		Student2Group.put(Student1, "Group"+size);
+		Student2Group.put(Student2, "Group"+size);
+
 		
 	}
 	
@@ -93,6 +105,9 @@ public class Group
 	 */
 	public Student findStudent(String first)
 	{
+		
+		
+		
 		for (Student item: GroupofAllStudents)
 		{
 			if (item.firstName.equals(first))
@@ -103,6 +118,29 @@ public class Group
 		}
 		
 		return null;
+		
+	}
+	
+	private String findStudentGroup(String name)
+	{
+		Student s = findStudent(name);
+		String group = Student2Group.get(s);
+		return group;
+	}
+	
+	public HashSet Chat(Student s, String message)
+	{
+		String group = findStudentGroup(s.firstName);
+		
+		conversations.add(message);
+		
+		Group2messages.put(group, conversations);
+		
+		return Group2messages.get(group);
+		
+		
+		
+		
 		
 	}
 	
