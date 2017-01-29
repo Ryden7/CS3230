@@ -1,5 +1,6 @@
 package StudentChat;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,10 +21,14 @@ public class test {
 		
 		Groups.Chat(s, "Hello");
 		Groups.Chat(s, "asdf");
-		Groups.Chat(s, "Hi!");
+		Groups.Chat(r, "Hi!");
+		Groups.Chat(r, "Hi!");
+		Groups.Chat(r, "God damn lag!");
+
 		
 		
-		HashSet<String> a = Groups.FindConversationsofStudent("Rizwan");
+		
+		ArrayList<String> a = Groups.FindConversationsofStudent("Rizwan");
 		
 		
 		

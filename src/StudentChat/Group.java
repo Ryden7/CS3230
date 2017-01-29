@@ -12,14 +12,15 @@ public class Group
 	private ArrayList<Student> ClassofStudentsSorted;
 	private Class classroom = new Class();
 	
-	//the set that holds the 2 students in a group, and the conversations set
-	private HashSet<Student> Groupof2Students;
-	private HashSet<String> conversations;
+	//the conversations LIST
+
+	private ArrayList<String> conversations;
+
 	
 	//Read as Group --> Students
 	private HashMap<String, HashSet> Group2students;
 	private HashMap<Student, String> Student2Group;
-	private HashMap<String, HashSet> Group2messages;
+	private HashMap<String, ArrayList> Group2messages;
 	
 	//Group size
 	private int size;
@@ -27,11 +28,11 @@ public class Group
 	public Group()
 	{
 		ClassofStudentsSorted = new ArrayList<Student>();
-		Groupof2Students = new HashSet<Student>();
 		Group2students = new HashMap<String, HashSet>();
 		Student2Group = new HashMap<Student, String>();
-		Group2messages = new HashMap<String, HashSet>();
-		conversations = new HashSet<String>();
+		Group2messages = new HashMap<String, ArrayList>();
+		//conversations = new HashSet<String>();
+		conversations = new ArrayList<String>();
 		
 
 		size = 0;
@@ -106,8 +107,6 @@ public class Group
 	public Student findStudent(String first)
 	{
 		
-		
-		
 		for (Student item: ClassofStudentsSorted)
 		{
 			if (item.firstName.equals(first))
@@ -121,6 +120,11 @@ public class Group
 		
 	}
 	
+	/**
+	 * private helper
+	 * @param name
+	 * @return
+	 */
 	private String findStudentGroup(String name)
 	{
 		Student s = findStudent(name);
@@ -128,22 +132,41 @@ public class Group
 		return group;
 	}
 	
+	
+	/**
+	 * Main chat method between 2 Students
+	 * @param s
+	 * @param message
+	 */
 	public void Chat(Student s, String message)
 	{
 		String group = findStudentGroup(s.firstName);
 		
-		conversations.add(message);
-		
-		Group2messages.put(group, conversations);
+		if (s.thingsStudentHasSaid.contains(s.firstName + " " + s.lastName + " : " + message))
+			return;
+		else
+		{
+			conversations.add(s.firstName + " " + s.lastName + " : " + message);
+			Group2messages.put(group, conversations);
+			s.thingsStudentHasSaid.add(s.firstName + " " + s.lastName + " : " + message);
+		}
+
 		
 		
 	}
 	
-	public HashSet<String> FindConversationsofStudent(String firstName)
+	/**
+	 * Displays the conversation between a student and his partner
+	 * @param firstName
+	 * @return
+	 */
+	public ArrayList<String> FindConversationsofStudent(String firstName)
 	{
 		String group = findStudentGroup(firstName);
 		
-		HashSet<String> conversation = Group2messages.get(group);
+		//HashSet<String> conversation = Group2messages.get(group);
+		ArrayList<String> conversation = Group2messages.get(group);
+		
 		return conversation;
 
 	}
