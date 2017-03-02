@@ -9,6 +9,8 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -37,6 +39,22 @@ public class GUI extends JFrame {
 	
 	public GUI()
 	{
+		
+		  JTextField nameField = new JTextField(5);
+	      JTextField ipField = new JTextField(5);
+
+	      JPanel myPanel = new JPanel();
+	      myPanel.add(new JLabel("Name"));
+	      myPanel.add(nameField);
+	      myPanel.add(new JLabel("IP address"));
+	      myPanel.add(ipField);
+
+	      int result = JOptionPane.showConfirmDialog(null, myPanel, 
+	               "Please Enter Name and IP", JOptionPane.OK_CANCEL_OPTION);
+	      if (result == JOptionPane.CANCEL_OPTION) 
+	      {
+	    	  return;
+	      }
 		
 		Groups = new Group();
 		List<Student> temp = Groups.CreateStudents();
