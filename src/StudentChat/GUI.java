@@ -3,6 +3,14 @@ package StudentChat;
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -31,14 +39,19 @@ public class GUI extends JFrame {
 	Student r;
 	JTextField field;
 	JTextArea textArea;
+	String name;
 	
-	public static void main(String[] args) 
+	public static void main(String[] args) throws IOException 
 	{
 		new GUI();
 	}
 	
-	public GUI()
+	public GUI() throws IOException
 	{
+		  InetAddress address;
+			BufferedReader in = null;
+			PrintWriter out;
+			BufferedReader stdIn;
 		
 		  JTextField nameField = new JTextField(5);
 	      JTextField ipField = new JTextField(5);
@@ -55,11 +68,61 @@ public class GUI extends JFrame {
 	      {
 	    	  return;
 	      }
+	      
+	      
+			try {
+				address = InetAddress.getByName(ipField.getText());
+				
+				 try {
+			           Socket MyClient = new Socket(address, 8090);
+			           out = new PrintWriter(MyClient.getOutputStream(), true);
+			           in = new BufferedReader(
+			               new InputStreamReader(MyClient.getInputStream()));
+			           
+			           stdIn =
+			        	        new BufferedReader(
+			        	            new InputStreamReader(System.in));
+			           
+			           String userInput;
+			           while ((userInput = stdIn.readLine()) != null) {
+			               out.println(userInput);
+			               System.out.println("echo: " + in.readLine());
+			           }
+			} catch (Exception e1)
+			{
+				ServerSocket ss = new ServerSocket(8090);
+				
+				//Socket s = ss.accept();
+				ServerHandler sh = new ServerHandler(ss, nameField.getText());
+				name = nameField.getText();
+				
+				new Thread(sh).start();
+			}
+			}
+			 catch (Exception e)
+		    {
+					ServerSocket ss = new ServerSocket(8090);
+					
+					//new Thread(new ServerHandler(ss);
+
+					//Socket s = ss.accept();
+					ServerHandler sh = new ServerHandler(ss, nameField.getText());
+					new Thread(sh).start();
+					name = nameField.getText();
+				//e.printStackTrace();
+		    }
 		
+	    
 		Groups = new Group();
 		List<Student> temp = Groups.CreateStudents();
 		Groups.GenerateGroups(temp);		
-		
+		Student s = Groups.findStudent("Rizwan");
+		Student r = Groups.findStudent("Brieanna");
+		Groups.Chat(s, "Hello");
+		Groups.Chat(s, "asdf");
+		Groups.Chat(r, "Hi!");
+		Groups.Chat(r, "Hi!");
+		Groups.Chat(r, "God damn lag!");
 		
 
 		JPanel panel = new JPanel();
@@ -136,7 +199,7 @@ public class GUI extends JFrame {
 					text = messageArea.getText();
 					
 					//How do u know which student this is?
-					Student s = Groups.findStudent("Rizwan");
+					Student s = Groups.findStudent(name);
 					Groups.Chat(s, text);
 					
 					
