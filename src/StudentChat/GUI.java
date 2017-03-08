@@ -111,20 +111,39 @@ public class GUI extends JFrame {
 					name = nameField.getText();
 				//e.printStackTrace();
 		    }
+			finally {
+						String fromServer;
+					    Socket myClient2 = new Socket("localhost", 8090);
+					    PrintWriter out2 = new PrintWriter(myClient2.getOutputStream(), true);
+					    BufferedReader in2 = new BufferedReader(
+					        new InputStreamReader(myClient2.getInputStream()));
+					    
+					    while ((fromServer = in2.readLine()) != null) {
+					        System.out.println("Server: " + fromServer);
+					        fromServer = "";
+					        
+
+					        /*
+					        fromUser = stdIn.readLine();
+					        if (fromUser != null) {
+					            System.out.println("Client: " + fromUser);
+					            out.println(fromUser);
+					        }
+					        */
+					    }
+					
+			}
 		
 	    
 		Groups = new Group();
 		List<Student> temp = Groups.CreateStudents();
 		Groups.GenerateGroups(temp);		
-		Student s = Groups.findStudent("Rizwan");
-		Student r = Groups.findStudent("Brieanna");
-		Groups.Chat(s, "Hello");
-		Groups.Chat(s, "asdf");
-		Groups.Chat(r, "Hi!");
-		Groups.Chat(r, "Hi!");
-		Groups.Chat(r, "God damn lag!");
+
 		
 
+	
+		
+		
 		JPanel panel = new JPanel();
 
 		panel.setLayout(new FlowLayout(BoxLayout.Y_AXIS));	

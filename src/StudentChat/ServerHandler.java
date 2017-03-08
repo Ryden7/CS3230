@@ -58,17 +58,49 @@ public class ServerHandler implements Runnable{
 		Group Groups = new Group();
 		List<Student> temp = Groups.CreateStudents();
 		Groups.GenerateGroups(temp);
+		Student s = Groups.findStudent("Rizwan");
+		Student r = Groups.findStudent("Brieanna");
+		Groups.Chat(s, "Hello");
+		Groups.Chat(s, "asdf");
+		Groups.Chat(r, "Hi!");
+		Groups.Chat(r, "Hi!");
+		Groups.Chat(r, "God damn lag!");
 		ArrayList<String> conversations = Groups.FindConversationsofStudent(studentName);
 		Student current = Groups.findStudent(studentName);
 		int i = 0;
+		int size = conversations.size();
+		
+		
 		outputLine = conversations.get(i);
 		try{
 			while (outputLine != null)
 			{
 				output.println(outputLine);
 				output.flush();
-				i++;
-				outputLine = conversations.get(i);
+				
+				/*
+				if (conversations.get(i) == null)
+					break;
+				else
+				*/
+				if (i == size-1)
+				{
+					/*
+					outputLine = conversations.get(size-1);
+					output.println(outputLine);
+					output.flush();
+					*/
+					break;
+
+
+				}
+				else
+				{
+					i++;
+					outputLine = conversations.get(i);
+				}
+								
+
 
 			}
 			
