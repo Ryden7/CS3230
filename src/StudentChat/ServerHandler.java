@@ -20,9 +20,9 @@ public class ServerHandler implements Runnable{
 
 	private String studentName;
 	
-	public ServerHandler(ServerSocket s, String name) throws IOException
+	public ServerHandler(ServerSocket svs, String name) throws IOException
 	{
-		ss = s;
+		ss = svs;
 		studentName = name;
 	}
 
@@ -113,12 +113,12 @@ public class ServerHandler implements Runnable{
 
 			}
 			
-
+			//server receives input from the user here
 		    try {
 				while ((inputLine = input.readLine()) != null) {
 					Groups.Chat(current, inputLine);
 				    outputLine = inputLine;
-				    output.println(outputLine);
+				    output.println(current.firstName + " " + current.lastName + " : " + outputLine);
 
 				}
 			} catch (IOException e) {

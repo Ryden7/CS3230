@@ -13,6 +13,10 @@ public class ClientHandler implements Runnable{
 	
 	String studentName;
 	InetAddress address;
+	static PrintWriter out;
+	static BufferedReader stdIn = null;
+	static String fromUser;
+	
 	
 	public ClientHandler(String name, InetAddress ip)
 	{
@@ -24,14 +28,14 @@ public class ClientHandler implements Runnable{
 	public void run() 
 	{
 		BufferedReader in = null;
-		PrintWriter out;
-		BufferedReader stdIn;
+
+		Socket myClient = null;
 	
 		 try {
-	           Socket MyClient = new Socket(address, 8090);
-	           out = new PrintWriter(MyClient.getOutputStream(), true);
+	           myClient = new Socket(address, 8090);
+	           out = new PrintWriter(myClient.getOutputStream(), true);
 	           in = new BufferedReader(
-	               new InputStreamReader(MyClient.getInputStream()));
+	               new InputStreamReader(myClient.getInputStream()));
 	           
 	           stdIn =
 	        	        new BufferedReader(
@@ -49,6 +53,7 @@ public class ClientHandler implements Runnable{
 					try
 					{
 						ServerSocket ss = new ServerSocket(8090);
+						
 						ServerHandler sh = new ServerHandler(ss, studentName);
 						new Thread(sh).start();
 
@@ -61,30 +66,31 @@ public class ClientHandler implements Runnable{
 					finally {
 						String fromServer;
 					    Socket myClient2 = null;
+					    PrintWriter out2 = null;
 						try {
-							myClient2 = new Socket("localhost", 8090);
+							myClient = new Socket("localhost", 8090);
 						}
 						catch (IOException e1) 
 						{
-							
+							e1.printStackTrace();
 						}
 					    try {
-							PrintWriter out2 = new PrintWriter(myClient2.getOutputStream(), true);
+					    	out = new PrintWriter(myClient.getOutputStream(), true);
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-					    BufferedReader in2 = null;
+					   // BufferedReader in = null;
 						try {
-							in2 = new BufferedReader(
-							    new InputStreamReader(myClient2.getInputStream()));
+							in = new BufferedReader(
+							    new InputStreamReader(myClient.getInputStream()));
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 					    
 					    try {
-							while ((fromServer = in2.readLine()) != null) 
+							while ((fromServer = in.readLine()) != null) 
 							{
 							    System.out.println("Server: " + fromServer);
 							    GUI.textArea.append(fromServer + "\n");
@@ -92,10 +98,11 @@ public class ClientHandler implements Runnable{
 							    
 
 							    /*
-							    fromUser = stdIn.readLine();
-							    if (fromUser != null) {
-							        System.out.println("Client: " + fromUser);
-							        out.println(fromUser);
+							    GUI.fromUser = stdIn.readLine();
+							    if (GUI.fromUser != null) {
+							        System.out.println("Client: " + GUI.fromUser);
+							        out2.println(GUI.fromUser);
+							        
 							    }
 							    */
 							}

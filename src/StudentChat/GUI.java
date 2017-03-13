@@ -185,9 +185,10 @@ public class GUI extends JFrame {
 			{
 				if (!(messageArea.getText().equals(null)))
 				{
+					
 					text = messageArea.getText();
 					
-					//How do u know which student this is?
+					/*
 					Student s = Groups.findStudent(name);
 					Groups.Chat(s, text);
 					
@@ -195,11 +196,19 @@ public class GUI extends JFrame {
 					// + "\n"
 					textArea.append(s.firstName + " " + s.lastName + " : " + text + "\n");
 					
-					
+					*/
 					messageArea.setText("");
+					
+					
+					 	ClientHandler.fromUser = text;
+					    if (ClientHandler.fromUser != null) {
+					        //System.out.println("Client: " + ClientHandler.fromUser);
+					        ClientHandler.out.println(ClientHandler.fromUser);
+					    }
 
 					
 				}
+				
 
 				
 				else {
