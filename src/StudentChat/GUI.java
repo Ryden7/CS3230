@@ -38,7 +38,7 @@ public class GUI extends JFrame {
 	Student s;
 	Student r;
 	JTextField field;
-	JTextArea textArea;
+	static JTextArea textArea;
 	String name;
 	
 	public static void main(String[] args) throws IOException 
@@ -49,12 +49,12 @@ public class GUI extends JFrame {
 	public GUI() throws IOException
 	{
 		  InetAddress address;
-			BufferedReader in = null;
-			PrintWriter out;
-			BufferedReader stdIn;
-		
+
 		  JTextField nameField = new JTextField(5);
 	      JTextField ipField = new JTextField(5);
+	      
+			textArea = new JTextArea(15, 30);
+			textArea.setEditable(false);
 
 	      JPanel myPanel = new JPanel();
 	      myPanel.add(new JLabel("Name"));
@@ -72,24 +72,13 @@ public class GUI extends JFrame {
 	      
 			try {
 				address = InetAddress.getByName(ipField.getText());
+				ClientHandler ch = new ClientHandler(nameField.getText(), address);
+				new Thread(ch).start();
 				
-				 try {
-			           Socket MyClient = new Socket(address, 8090);
-			           out = new PrintWriter(MyClient.getOutputStream(), true);
-			           in = new BufferedReader(
-			               new InputStreamReader(MyClient.getInputStream()));
-			           
-			           stdIn =
-			        	        new BufferedReader(
-			        	            new InputStreamReader(System.in));
-			           
-			           String userInput;
-			           while ((userInput = stdIn.readLine()) != null) {
-			               out.println(userInput);
-			               System.out.println("echo: " + in.readLine());
-			           }
-			} catch (Exception e1)
+			}
+			 catch (Exception e1)
 			{
+				/*
 				ServerSocket ss = new ServerSocket(8090);
 				
 				//Socket s = ss.accept();
@@ -97,8 +86,10 @@ public class GUI extends JFrame {
 				name = nameField.getText();
 				
 				new Thread(sh).start();
+				*/
 			}
-			}
+			
+			/*
 			 catch (Exception e)
 		    {
 					ServerSocket ss = new ServerSocket(8090);
@@ -111,28 +102,8 @@ public class GUI extends JFrame {
 					name = nameField.getText();
 				//e.printStackTrace();
 		    }
-			finally {
-						String fromServer;
-					    Socket myClient2 = new Socket("localhost", 8090);
-					    PrintWriter out2 = new PrintWriter(myClient2.getOutputStream(), true);
-					    BufferedReader in2 = new BufferedReader(
-					        new InputStreamReader(myClient2.getInputStream()));
-					    
-					    while ((fromServer = in2.readLine()) != null) {
-					        System.out.println("Server: " + fromServer);
-					        fromServer = "";
-					        
+		    */
 
-					        /*
-					        fromUser = stdIn.readLine();
-					        if (fromUser != null) {
-					            System.out.println("Client: " + fromUser);
-					            out.println(fromUser);
-					        }
-					        */
-					    }
-					
-			}
 		
 	    
 		Groups = new Group();
@@ -158,8 +129,7 @@ public class GUI extends JFrame {
 		//add(panel2);
 
 		
-		textArea = new JTextArea(15, 30);
-		textArea.setEditable(false);
+
 		
 		messageArea = new JTextArea(1, 1);
 		field = new JTextField();

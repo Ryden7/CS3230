@@ -71,7 +71,9 @@ public class ServerHandler implements Runnable{
 		int size = conversations.size();
 		
 		
-		outputLine = conversations.get(i);
+		//outputLine = conversations.get(i);
+		outputLine = "ACK\n";
+		
 		try{
 			while (outputLine != null)
 			{
@@ -83,6 +85,9 @@ public class ServerHandler implements Runnable{
 					break;
 				else
 				*/
+				
+				outputLine = conversations.get(i);
+
 				if (i == size-1)
 				{
 					/*
@@ -90,6 +95,10 @@ public class ServerHandler implements Runnable{
 					output.println(outputLine);
 					output.flush();
 					*/
+					outputLine = conversations.get(size-1);
+					output.println(outputLine);
+					output.flush();
+					
 					break;
 
 
@@ -97,7 +106,7 @@ public class ServerHandler implements Runnable{
 				else
 				{
 					i++;
-					outputLine = conversations.get(i);
+
 				}
 								
 
