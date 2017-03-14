@@ -78,32 +78,9 @@ public class GUI extends JFrame {
 			}
 			 catch (Exception e1)
 			{
-				/*
-				ServerSocket ss = new ServerSocket(8090);
-				
-				//Socket s = ss.accept();
-				ServerHandler sh = new ServerHandler(ss, nameField.getText());
-				name = nameField.getText();
-				
-				new Thread(sh).start();
-				*/
+
 			}
 			
-			/*
-			 catch (Exception e)
-		    {
-					ServerSocket ss = new ServerSocket(8090);
-					
-					//new Thread(new ServerHandler(ss);
-
-					//Socket s = ss.accept();
-					ServerHandler sh = new ServerHandler(ss, nameField.getText());
-					new Thread(sh).start();
-					name = nameField.getText();
-				//e.printStackTrace();
-		    }
-		    */
-
 		
 	    
 		Groups = new Group();

@@ -32,7 +32,9 @@ public class ClientHandler implements Runnable{
 		Socket myClient = null;
 	
 		 try {
-	           myClient = new Socket(address, 8090);
+	           String userInput;
+
+	           myClient = new Socket(address, 8091);
 	           out = new PrintWriter(myClient.getOutputStream(), true);
 	           in = new BufferedReader(
 	               new InputStreamReader(myClient.getInputStream()));
@@ -41,21 +43,32 @@ public class ClientHandler implements Runnable{
 	        	        new BufferedReader(
 	        	            new InputStreamReader(System.in));
 	           
-	           String userInput;
-	           while ((userInput = stdIn.readLine()) != null) 
+
+
+	           
+	           //change userInput to fromServer
+	           while ((userInput = in.readLine()) != null) 
 	           {
+	        	   
+				    System.out.println("Server: " + userInput);
+				    GUI.textArea.append(userInput + "\n");
+				    userInput = "";
+	        	   /*
 	               out.println(userInput);
 	               System.out.println("echo: " + in.readLine());
+	               */
 	           }
 		 	}
 				catch(Exception e) 
 		 	{
 					try
 					{
-						ServerSocket ss = new ServerSocket(8090);
 						
-						ServerHandler sh = new ServerHandler(ss, studentName);
-						new Thread(sh).start();
+					//	ServerHandler sh = new ServerHandler(ss, studentName); //freezes at ss.accept in ServerHandler
+						//new MultiServerHandler(ss.accept()).start();
+						//new Thread(new MultiServerHandler(ss, studentName)).start();
+						new Thread(new ServerHandler()).start();
+			           // new MultiServerHandler(ss.accept(), studentName).start(); //blocks main thread
 
 					}
 					catch(Exception e2)
@@ -68,7 +81,7 @@ public class ClientHandler implements Runnable{
 					    Socket myClient2 = null;
 					    PrintWriter out2 = null;
 						try {
-							myClient = new Socket("localhost", 8090);
+							myClient = new Socket("localhost", 8091);
 						}
 						catch (IOException e1) 
 						{
@@ -89,6 +102,12 @@ public class ClientHandler implements Runnable{
 							e1.printStackTrace();
 						}
 					    
+						 fromUser = studentName;
+						    if (fromUser != null) {
+						        System.out.println("Client: " + fromUser);
+						        out.println(fromUser);
+						    }
+						        
 					    try {
 							while ((fromServer = in.readLine()) != null) 
 							{
