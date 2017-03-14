@@ -2,22 +2,21 @@ package StudentChat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MultiServerHandler extends Thread{
-	private ServerSocket ss;
-	private Socket socket;
+public class MultiServerHandler implements Runnable{
+	protected Socket socket;
 	private PrintWriter output; 
 	private BufferedReader input;
-	private HashMap<String, Socket> list;
+	private static int j = 0;
+	private static HashMap<Integer, Socket> list = new HashMap<Integer, Socket>();
+	private static ArrayList<String> connectedUsers = new ArrayList<String>();
+
 	private boolean set;
 
 
@@ -25,10 +24,8 @@ public class MultiServerHandler extends Thread{
 	
 	public MultiServerHandler(Socket incSocket)
 	{
-        super("MultiServerHandler");
         socket = incSocket;
         set = false;
-        list = new HashMap<String, Socket>();
 
 
 	}
@@ -36,44 +33,35 @@ public class MultiServerHandler extends Thread{
 	@Override
 	public void run() {
 		
-		try {
-			 input = new BufferedReader(
-			        new InputStreamReader(socket.getInputStream()));
-		} catch (IOException e1) 
-		{
-			e1.printStackTrace();
-		}
 		try 
 		{
+			//input from client
+			 input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			//output from server
 			 output = new PrintWriter(socket.getOutputStream(), true);
-		} catch (IOException e1) 
+		} 
+		catch (IOException e1) 
 		{
 			e1.printStackTrace();
 		}
 		
 		
-		
-		
-		
-		String outputLine, inputLine;
-		
+		//initializes class
 		Group Groups = new Group();
 		List<Student> temp = Groups.CreateStudents();
 		Groups.GenerateGroups(temp);
 		Student s = Groups.findStudent("Rizwan");
 		Student r = Groups.findStudent("Brieanna");
+		Student current = null;
 		Groups.Chat(s, "Hello");
 		Groups.Chat(s, "asdf");
 		Groups.Chat(r, "Hi!");
 		Groups.Chat(r, "Hi!");
 		Groups.Chat(r, "God damn lag!");
-		ArrayList<String> conversations = Groups.FindConversationsofStudent(studentName);
-		Student current = Groups.findStudent(studentName);
-		//int size = conversations.size();
 		
-		
+		String outputLine = null, inputLine = null;
 
-			//inputLine = studentName;
+
 			//server receives input from the user here
 		    try {
 				while ((inputLine = input.readLine()) != null) 
@@ -81,87 +69,61 @@ public class MultiServerHandler extends Thread{
 					if (set == false)
 					{
 						studentName = inputLine;
-						list.put(inputLine, socket);
-						set = true;
-						break;
+						if (!connectedUsers.contains(studentName))
+						{
+							list.put(j, socket);
+							j++;
+							connectedUsers.add(studentName);
+							outputLine = "ACK\n";
+							if (Groups.findStudent(studentName) != null)
+							{
+								ArrayList<String> conversations = Groups.FindConversationsofStudent(studentName);
+								current = Groups.findStudent(studentName);
 
-					}
-					
-					Groups.Chat(current, inputLine);
-				    outputLine = inputLine;
-				    output.println(current.firstName + " " + current.lastName + " : " + outputLine);
+								int size = conversations.size();
+								
+								for(int i = 0; i < size; i++)
+								{
+									outputLine = conversations.get(i);
+									output.println(outputLine);
+									output.flush();
+									outputLine = "";
+								}
+								set = true;
+								continue;
+							}
 
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		    
-		    /*
-		 finally {
-			try 
-			{
-				input.close();
-			} 
-			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			output.close();
-			try {
-				socket.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		*/
-		    
-		    //server sends stuff here
-		  
-		    if (list.containsKey(studentName))
-		    	outputLine = "DENY\n";
-		    else
-		    	outputLine = "ACK\n";
-		    	
-			
-			try{
+							
 
-					output.println(outputLine);
-					output.flush();
-					
-				
-			}
-			finally
-			{
-				
-			}
-					
-					//outputLine = conversations.get(i);
-
-					/*
-					if (i == size-1)
-					{
-
-						outputLine = conversations.get(size-1);
-						output.println(outputLine);
-						output.flush();
+						}
+						else
+						{
+							outputLine = "DENY\n";
+							output.println(outputLine);							
+							socket.close();
+							return;
+							
+						}
 						
-						break;
-
-
-					}
-					else
-					{
-						i++;
 
 					}
 					
+					//sends the messages to all other students
+					//NOTE: to join the chat room, the student must be part of the class!
+					for(int i = 0; i < list.size(); i++)
+					{
+						Socket allSockets = list.get(i);
+						PrintWriter output2 = new PrintWriter(allSockets.getOutputStream(), true);
+						output2.println(current.firstName + " " + current.lastName + " : " + inputLine);
+					}
+
+					output.flush();
+
 				}
-				*/
-			
-	
-		
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		    	    			
 		
 	}
 

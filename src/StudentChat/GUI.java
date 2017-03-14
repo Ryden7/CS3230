@@ -3,14 +3,8 @@ package StudentChat;
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -80,48 +74,29 @@ public class GUI extends JFrame {
 			{
 
 			}
-			
-		
+				
 	    
 		Groups = new Group();
 		List<Student> temp = Groups.CreateStudents();
 		Groups.GenerateGroups(temp);		
 
 		
-
-	
-		
-		
 		JPanel panel = new JPanel();
 
 		panel.setLayout(new FlowLayout(BoxLayout.Y_AXIS));	
 
 		
-		JButton button = new JButton();
+		JButton button = new JButton("Send");
 
 		add(panel);
-		
-
-
-		//add(panel2);
-
-		
-
 		
 		messageArea = new JTextArea(1, 1);
 		field = new JTextField();
 		
 		messageArea.setLineWrap(true);
 		messageArea.setSize(500, 500);
-		//field.addActionListener(new ClassListener());
 		messageArea.addKeyListener(new ClassListener());
 
-
-		//textArea.setAlignmentX(CENTER_ALIGNMENT);
-		
-
-
-		//messageArea.setSize(50, 50);	//does nothing
 		
 		JScrollPane scrollPane = 
 			new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -130,7 +105,6 @@ public class GUI extends JFrame {
 		panel.add(scrollPane);
 		panel.add(messageArea);
 		panel.add(button);
-		//panel.add(field);
 
 
 		
@@ -153,10 +127,6 @@ public class GUI extends JFrame {
 	        if (arg0.getKeyCode() == KeyEvent.VK_ENTER)
 	            pressed.add(arg0.getKeyChar());
 
-	        /*
-			if (arg0.getKeyCode() == KeyEvent.VK_SHIFT)
-				messageArea.append("\n");
-				*/
 			
 			if (pressed.size() > 1)
 			{
@@ -164,32 +134,19 @@ public class GUI extends JFrame {
 				{
 					
 					text = messageArea.getText();
-					
-					/*
-					Student s = Groups.findStudent(name);
-					Groups.Chat(s, text);
-					
-					
-					// + "\n"
-					textArea.append(s.firstName + " " + s.lastName + " : " + text + "\n");
-					
-					*/
+
 					messageArea.setText("");
 					
 					
 					 	ClientHandler.fromUser = text;
-					    if (ClientHandler.fromUser != null) {
-					        //System.out.println("Client: " + ClientHandler.fromUser);
+					    if (ClientHandler.fromUser != null) 
+					    {
 					        ClientHandler.out.println(ClientHandler.fromUser);
 					    }
-
-					
+	
 				}
-				
-
-				
+		
 				else {
-					//messageArea.setText("it's a text field");
 				}		
 			}
 
