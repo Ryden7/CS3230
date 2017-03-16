@@ -78,6 +78,17 @@ public class MultiServerHandler implements Runnable{
 							if (Groups.findStudent(studentName) != null)
 							{
 								ArrayList<String> conversations = Groups.FindConversationsofStudent(studentName);
+								if (conversations == null)
+								{
+									current = Groups.findStudent(studentName);
+									Groups.Chat(current, "init");
+									output.println(outputLine);
+									output.flush();
+									set = true;
+									continue;
+									
+								}
+								
 								current = Groups.findStudent(studentName);
 
 								int size = conversations.size();
@@ -91,6 +102,13 @@ public class MultiServerHandler implements Runnable{
 								}
 								set = true;
 								continue;
+							}
+							else
+							{
+								outputLine = "DENY\n You are not part of this class!";
+								output.println(outputLine);							
+								socket.close();
+								return;
 							}
 
 							
@@ -110,6 +128,7 @@ public class MultiServerHandler implements Runnable{
 					
 					//sends the messages to all other students
 					//NOTE: to join the chat room, the student must be part of the class!
+					
 					for(int i = 0; i < list.size(); i++)
 					{
 						Socket allSockets = list.get(i);
