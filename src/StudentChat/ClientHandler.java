@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
@@ -36,9 +37,9 @@ public class ClientHandler implements Runnable{
 				try {
 					myClient = new Socket("localhost", 8090);
 				}
-				catch (IOException e1) 
+				catch (ConnectException e1) 
 				{
-					e1.printStackTrace();
+					System.out.println("Couldn't find server, starting server...");
 				}
 			    try {
 			    	out = new PrintWriter(myClient.getOutputStream(), true);
@@ -46,8 +47,7 @@ public class ClientHandler implements Runnable{
 					e1.printStackTrace();
 				}
 				try {
-					in = new BufferedReader(
-					    new InputStreamReader(myClient.getInputStream()));
+					in = new BufferedReader(new InputStreamReader(myClient.getInputStream()));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -79,22 +79,19 @@ public class ClientHandler implements Runnable{
 					try
 					{				
 						new Thread(new ServerHandler()).start();
-					}
-					catch(Exception e2)
-					{
-						e2.printStackTrace();
-					}
-					
-					finally {
+						
 						try {
 							TimeUnit.SECONDS.sleep(2);
 						} catch (InterruptedException e1) {
 							e1.printStackTrace();
 						}
 							run();
-						
 					}
-
+					catch(Exception e1)
+					{
+						e1.printStackTrace();
+					}
+					
 				
 		}
 		 

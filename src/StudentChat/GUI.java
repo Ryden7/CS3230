@@ -88,6 +88,7 @@ public class GUI extends JFrame {
 		
 		JButton button = new JButton("Send");
 
+
 		add(panel);
 		
 		messageArea = new JTextArea(1, 1);
@@ -105,11 +106,37 @@ public class GUI extends JFrame {
 		panel.add(scrollPane);
 		panel.add(messageArea);
 		panel.add(button);
+		
+		
+		
 
 
 		
 		setSize(600, 600);
 		setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		button.addActionListener((e) -> sendMessage()); 
+
+	}
+	
+	private void sendMessage()
+	{
+		{
+			String text;
+			text = messageArea.getText();
+		
+
+		messageArea.setText("");
+		
+		
+		 	ClientHandler.fromUser = text;
+		    if (ClientHandler.fromUser != null) 
+		    {
+		        ClientHandler.out.println(ClientHandler.fromUser);
+		    }
+		 }; 
+
 	}
 	
 	
@@ -132,18 +159,8 @@ public class GUI extends JFrame {
 			{
 				if (!(messageArea.getText().equals(null)))
 				{
-					
-					text = messageArea.getText();
-
-					messageArea.setText("");
-					
-					
-					 	ClientHandler.fromUser = text;
-					    if (ClientHandler.fromUser != null) 
-					    {
-					        ClientHandler.out.println(ClientHandler.fromUser);
-					    }
-	
+					sendMessage();
+			
 				}
 		
 				else {
